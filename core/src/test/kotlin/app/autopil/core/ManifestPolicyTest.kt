@@ -23,4 +23,18 @@ class ManifestPolicyTest {
         assertFalse(manifest.contains("QUERY_ALL_PACKAGES"))
         assertFalse(manifest.contains("SYSTEM_ALERT_WINDOW"))
     }
+
+    @Test
+    fun warningNamesTheRulesAndDoesNotWaiveStatutoryLiability() {
+        val notice = File("../app/src/main/res/values/strings.xml").readText()
+        val readme = File("../README.md").readText()
+        assertTrue(notice.contains("Пункт 2.7 Правил дорожного движения"))
+        assertTrue(notice.contains("12.36.1"))
+        assertTrue(notice.contains("биометрические персональные данные"))
+        assertTrue(notice.contains("не отменяет ответственность изготовителя"))
+        assertFalse(notice.contains("не несёт ответственности"))
+        assertTrue(readme.contains("152-ФЗ"))
+        assertTrue(readme.contains("12.36.1"))
+        assertTrue(readme.contains("статья 16"))
+    }
 }

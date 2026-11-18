@@ -70,7 +70,19 @@ class MainActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.micButton).setOnClickListener {
             if (!granted(Manifest.permission.RECORD_AUDIO)) micPermission.launch(Manifest.permission.RECORD_AUDIO)
         }
+        findViewById<MaterialButton>(R.id.noticeAccept).setOnClickListener {
+            prefs.noticeVersion = Prefs.NOTICE_VERSION
+            render()
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
+        findViewById<MaterialButton>(R.id.noticeDecline).setOnClickListener { render() }
+        findViewById<MaterialButton>(R.id.noticeWithdraw).setOnClickListener {
+            prefs.noticeVersion = ""
+            render()
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
         findViewById<MaterialButton>(R.id.accessButton).setOnClickListener {
+            if (!prefs.noticeAccepted) return@setOnClickListener
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
         findViewById<MaterialButton>(R.id.contactsButton).setOnClickListener {
@@ -163,9 +175,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.micButton).setText(
             if (granted(Manifest.permission.RECORD_AUDIO)) R.string.mic_ready else R.string.mic_allow,
         )
-        findViewById<MaterialButton>(R.id.accessButton).setText(
-            if (accessibilityEnabled()) R.string.access_ready else R.string.access_open,
-        )
+        val accepted = prefs.noticeAccepted
+        findViewById<MaterialButton>(R.id.noticeAccept).visibility = if (accepted) android.view.View.GONE else android.view.View.VISIBLE
+        findViewById<MaterialButton>(R.id.noticeDecline).visibility = if (accepted) android.view.View.GONE else android.view.View.VISIBLE
+        findViewById<TextView>(R.id.noticeAcceptedNote).visibility = if (accepted) android.view.View.VISIBLE else android.view.View.GONE
+        findViewById<MaterialButton>(R.id.noticeWithdraw).visibility = if (accepted) android.view.View.VISIBLE else android.view.View.GONE
+        val access = findViewById<MaterialButton>(R.id.accessButton)
+        access.isEnabled = accepted
+        access.setText(if (accessibilityEnabled()) R.string.access_ready else R.string.access_open)
         findViewById<MaterialButton>(R.id.contactsButton).setText(
             if (granted(Manifest.permission.READ_CONTACTS)) R.string.contacts_ready else R.string.contacts_allow,
         )

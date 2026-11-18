@@ -163,6 +163,64 @@
             android:layout_marginTop="4dp"
             android:text="@string/access_body" />
 
+        <LinearLayout
+            android:id="@+id/noticeCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                style="@style/AutoPilEyebrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:accessibilityHeading="true"
+                android:text="@string/notice_title" />
+
+            <TextView
+                android:id="@+id/noticeText"
+                style="@style/AutoPilBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/notice_body" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/noticeAccept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/notice_accept" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/noticeDecline"
+                style="@style/Widget.AutoPil.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/notice_decline" />
+
+            <TextView
+                android:id="@+id/noticeAcceptedNote"
+                style="@style/AutoPilMuted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/notice_accepted"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/noticeWithdraw"
+                style="@style/Widget.AutoPil.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/notice_withdraw"
+                android:visibility="gone" />
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/accessButton"
             style="@style/Widget.AutoPil.Button.Secondary"
