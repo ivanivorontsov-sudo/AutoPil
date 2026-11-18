@@ -1,6 +1,7 @@
 package app.autopil.voice
 
 import android.Manifest
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         findViewById<MaterialButton>(R.id.batteryButton).setOnClickListener { openBatterySettings() }
+        findViewById<MaterialButton>(R.id.adminButton).setOnClickListener { requestDeviceAdmin() }
         findViewById<MaterialButton>(R.id.runCommandButton).setOnClickListener { runTypedCommand() }
         findViewById<TextInputEditText>(R.id.commandInput).setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
@@ -167,6 +169,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.contactsButton).setText(
             if (granted(Manifest.permission.READ_CONTACTS)) R.string.contacts_ready else R.string.contacts_allow,
         )
+        findViewById<MaterialButton>(R.id.adminButton).setText(
+            if (DeviceAdmin.isActive(this)) R.string.admin_ready else R.string.admin_allow,
+        )
         findViewById<TextView>(R.id.logText).text = if (state.log.isEmpty()) {
             getString(R.string.log_empty)
         } else {
@@ -182,6 +187,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun showOff() {
         findViewById<TextView>(R.id.statusText).setText(R.string.status_off)
+    }
+
+    private fun requestDeviceAdmin() {
+        if (DeviceAdmin.isActive(this)) return
+        val request = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+            putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, DeviceAdmin.component(this@MainActivity))
+            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, getString(R.string.admin_explanation))
+        }
+        startActivity(request)
     }
 
     private fun openBatterySettings() {

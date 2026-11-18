@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Device admin is intentionally absent. It can wipe the phone and block
-         uninstall, and it cannot press buttons. Voice control uses the
-         accessibility service the person turns on themselves. -->
+    <!-- Device admin is optional. The person activates it in the system consent
+         screen. The policy file allows only force-lock, not wipe or password reset. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -68,5 +67,19 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Hands-free accessibility control when the microphone foreground type is unavailable" />
         </service>
+
+        <receiver
+            android:name=".AutopilDeviceAdmin"
+            android:description="@string/admin_explanation"
+            android:exported="true"
+            android:label="@string/admin_title"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

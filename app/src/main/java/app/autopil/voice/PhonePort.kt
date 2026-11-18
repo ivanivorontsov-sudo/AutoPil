@@ -42,7 +42,11 @@ internal class PhonePort(
 
     override suspend fun scroll(direction: Direction): Boolean = screen.scroll(direction)
 
-    override suspend fun global(action: GlobalAction): Boolean = screen.global(action)
+    override suspend fun global(action: GlobalAction): Boolean {
+        if (screen.global(action)) return true
+        if (action == GlobalAction.LockScreen) return DeviceAdmin.lockNow(service)
+        return false
+    }
 
     override suspend fun openApp(name: String, packages: List<String>, terms: List<String>): OpenAppResult {
         return apps.open(name, packages, terms)
